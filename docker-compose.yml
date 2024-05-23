@@ -1,0 +1,50 @@
+services:
+  api1:
+    container_name: "snippet_searcher_runner"
+    image: ghcr.io/ingsis-group-12/snippet-searcher-runner:main
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+
+  api2:
+    container_name: "snippet_permissions"
+    image: ghcr.io/ingsis-group-12/snippet-permissions:main
+    ports:
+      - "8081:8081"
+    environment:
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_HOST: postgres
+      DB_PORT: 5432
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    expose:
+      - 8081
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  api3:
+    container_name: "snippet_operations"
+    image: ghcr.io/ingsis-group-12/snippet-operations:main
+    ports:
+      - "8082:8082"
+    expose:
+      - 8082
+
+volumes:
+  postgres-data:
