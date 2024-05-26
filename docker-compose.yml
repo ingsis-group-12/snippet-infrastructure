@@ -25,19 +25,6 @@ services:
     expose:
       - 8081
 
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    env_file:
-      - .env
-
   api3:
     container_name: "snippet_operations"
     image: ghcr.io/ingsis-group-12/snippet-operations:main
@@ -45,6 +32,3 @@ services:
       - "8082:8082"
     expose:
       - 8082
-
-volumes:
-  postgres-data:
