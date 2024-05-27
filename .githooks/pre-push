@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Running 'gradle build' before pushing..."
+
+if ./gradlew build; then
+    echo "Gradle push passed. Proceeding with the push."
+    exit 0
+else
+    echo "Gradle push failed. Please fix the issues before pushing."
+    exit 1
+fi
