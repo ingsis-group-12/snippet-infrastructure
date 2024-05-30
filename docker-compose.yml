@@ -14,6 +14,8 @@ services:
       - "8081:8081"
     expose:
       - 8081
+    depends_on:
+      - api2.2
 
   api2.2:
     container_name: "asset_service"
