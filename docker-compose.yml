@@ -4,16 +4,12 @@ services:
     image: ghcr.io/ingsis-group-12/snippet-searcher-runner:main
     ports:
       - "8080:8080"
-    expose:
-      - 8080
 
   api2.1:
     container_name: "snippet_operations"
     image: ghcr.io/ingsis-group-12/snippet-operations:main
     ports:
       - "8081:8081"
-    expose:
-      - 8081
     depends_on:
       - api2.2
 
@@ -44,8 +40,6 @@ services:
       - "8083:8083"
     depends_on:
       - postgres
-    expose:
-      - 8081
 
   postgres:
     image: postgres:latest
