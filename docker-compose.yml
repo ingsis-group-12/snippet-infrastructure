@@ -54,6 +54,14 @@ services:
     env_file:
       - .env
 
+  ui:
+    container_name: "printscript_ui"
+    image: ghcr.io/ingsis-group-12/printscript-ui:master
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgres
+
 volumes:
   postgres-data:
   blob:
