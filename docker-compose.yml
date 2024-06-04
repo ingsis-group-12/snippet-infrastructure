@@ -11,7 +11,7 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - api_s3
+      - api_asset
 
   api_asset:
     container_name: "asset_service"
