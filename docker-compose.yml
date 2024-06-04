@@ -1,19 +1,19 @@
 services:
-  api1:
+  api_runner:
     container_name: "snippet_searcher_runner"
     image: ghcr.io/ingsis-group-12/snippet-searcher-runner:main
     ports:
       - "8080:8080"
 
-  api2.1:
+  api_operations:
     container_name: "snippet_operations"
     image: ghcr.io/ingsis-group-12/snippet-operations:main
     ports:
       - "8081:8081"
     depends_on:
-      - api2.2
+      - api_s3
 
-  api2.2:
+  api_s3:
     container_name: "asset_service"
     image: ghcr.io/austral-ingsis/snippet-asset-service:latest
     ports:
@@ -33,7 +33,7 @@ services:
     volumes:
       - blob:/workspace
 
-  api3:
+  api_permissions:
     container_name: "snippet_permissions"
     image: ghcr.io/ingsis-group-12/snippet-permissions:main
     ports:
@@ -56,7 +56,7 @@ services:
 
   printscript-ui:
     container_name: "printscript_ui"
-    image: ghcr.io/ingsis-group-12/printscript-ui:master
+    image: ghcr.io/ingsis-group-12/printscript-ui@sha256:c8bc819ea262bf936820052bf77a8d4f9fcec552530821cbf00b3bb3f8d3c0b4
     ports:
       - "5173:5173"
 
