@@ -54,13 +54,20 @@ services:
     env_file:
       - .env
 
-  ui:
+  printscript-ui:
     container_name: "printscript_ui"
     image: ghcr.io/ingsis-group-12/printscript-ui:master
     ports:
-      - "8084:8084"
-    depends_on:
-      - postgres
+      - "5173:5173"
+    environment:
+      VITE_FRONTEND_URL: ${VITE_FRONTEND_URL}
+      VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+      VITE_REACT_APP_AUTH0_DOMAIN: ${VITE_REACT_APP_AUTH0_DOMAIN}
+      VITE_REACT_APP_AUTH0_CLIENT_ID: ${VITE_REACT_APP_AUTH0_CLIENT_ID}
+      VITE_REACT_APP_AUTH0_AUDIENCE: ${VITE_REACT_APP_AUTH0_AUDIENCE}
+      VITE_REACT_APP_AUTH0_CALLBACK_URL: ${VITE_REACT_APP_AUTH0_CALLBACK_URL}
+    env_file:
+      - .env
 
 volumes:
   postgres-data:
