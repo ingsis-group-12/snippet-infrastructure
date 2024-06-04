@@ -56,7 +56,7 @@ services:
 
   printscript-ui:
     container_name: "printscript_ui"
-    image: ghcr.io/ingsis-group-12/printscript-ui@sha256:c8bc819ea262bf936820052bf77a8d4f9fcec552530821cbf00b3bb3f8d3c0b4
+    image: ghcr.io/ingsis-group-12/printscript-ui:master
     ports:
       - "5173:5173"
 
