@@ -62,14 +62,15 @@ services:
 
   reverse-proxy:
     container_name: "reverse-proxy"
-    build: nginx
+    image: nginx:latest
     ports:
       - 80:80
       - 443:443
     restart: always
     volumes:
-      - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
       - ./certbot/www:/var/www/certbot/:ro
+      - ./nginx/images/:/usr/share/nginx/images/:ro
 
   certbot:
     image: certbot/certbot:latest
