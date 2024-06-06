@@ -60,6 +60,12 @@ services:
     ports:
       - "5173:5173"
 
+  reverse-proxy:
+    container_name: "reverse-proxy"
+    build: ./reverse-proxy
+    ports:
+      - 80:80
+
 volumes:
   postgres-data:
   blob:
