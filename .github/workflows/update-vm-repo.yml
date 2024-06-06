@@ -1,0 +1,41 @@
+name: remote ssh command
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  update-repo-dev:
+    name: Update Repo
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_DEV_HOST }}
+          username: ${{ secrets.VM_DEV_USER }}
+          key: ${{ secrets.VM_DEV_SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/projects/snippet-infrastructure
+            sudo git pull
+            sudo docker compose pull
+            sudo docker compose up -d
+
+  update-repo-prod:
+    name: Update Repo
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_PROD_HOST }}
+          username: ${{ secrets.VM_PROD_USER }}
+          key: ${{ secrets.VM_PROD_SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/projects/snippet-infrastructure
+            sudo git pull
+            sudo docker compose pull
+            sudo docker compose up -d
+
