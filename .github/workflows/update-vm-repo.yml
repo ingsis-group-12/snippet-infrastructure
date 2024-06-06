@@ -6,7 +6,7 @@ on:
 
 jobs:
   update-repo-dev:
-    name: Update Repo
+    name: Update Repo dev VM
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
@@ -23,7 +23,7 @@ jobs:
             sudo docker compose up -d
 
   update-repo-prod:
-    name: Update Repo
+    name: Update Repo prod VM
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
