@@ -2,12 +2,14 @@ services:
   api_runner:
     container_name: "snippet_searcher_runner"
     image: ghcr.io/ingsis-group-12/snippet-searcher-runner:main
+    restart: always
     ports:
       - "8080:8080"
 
   api_operations:
     container_name: "snippet_operations"
     image: ghcr.io/ingsis-group-12/snippet-operations:main
+    restart: always
     ports:
       - "8081:8081"
     depends_on:
@@ -16,6 +18,7 @@ services:
   api_asset:
     container_name: "asset_service"
     image: ghcr.io/austral-ingsis/snippet-asset-service:latest
+    restart: always
     ports:
       - "8082:8082"
     environment:
@@ -36,6 +39,7 @@ services:
   api_permissions:
     container_name: "snippet_permissions"
     image: ghcr.io/ingsis-group-12/snippet-permissions:main
+    restart: always
     ports:
       - "8083:8083"
     depends_on:
@@ -53,20 +57,22 @@ services:
       - postgres-data:/var/lib/postgresql/data
     env_file:
       - .env
+    restart: always
 
   printscript-ui:
     container_name: "printscript_ui"
     image: ghcr.io/ingsis-group-12/printscript-ui:master
+    restart: always
     ports:
       - "5173:5173"
 
   reverse-proxy:
     container_name: "reverse-proxy"
     image: nginx:latest
+    restart: always
     ports:
       - "80:80"
       - "443:443"
-    restart: always
     volumes:
       - ./nginx/conf/:/etc/nginx/conf.d/:ro
       - ./certbot/www:/var/www/certbot/:ro
@@ -78,6 +84,7 @@ services:
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
+    restart: always
 
 volumes:
   postgres-data:
