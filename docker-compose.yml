@@ -65,6 +65,8 @@ services:
     restart: always
     ports:
       - "5173:5173"
+    volumes:
+      - dist-volume:/app/dist
 
   reverse-proxy:
     container_name: "reverse-proxy"
@@ -79,6 +81,8 @@ services:
       - ./certbot/conf/:/etc/nginx/ssl/:ro
       - ./nginx/images/:/usr/share/nginx/images/:ro
 
+      - dist-volume:/usr/share/nginx/html:ro
+
   certbot:
     image: certbot/certbot:latest
     volumes:
@@ -90,3 +94,4 @@ volumes:
   postgres-data:
   blob:
     external: false
+  dist-volume:
