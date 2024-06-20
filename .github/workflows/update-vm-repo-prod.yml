@@ -1,4 +1,4 @@
-name: remote SSH
+name: update production VM
 
 on:
   push:
