@@ -88,11 +88,13 @@ services:
     restart: always
 
   printscript-ui:
-    container_name: "printscript_ui"
+    container_name: "printscript-ui"
     image: ghcr.io/ingsis-group-12/printscript-ui:master
     restart: always
     ports:
       - "5173:5173"
+    volumes:
+      - dist-volume:/app/dist
 
   reverse-proxy:
     container_name: "reverse-proxy"
@@ -106,6 +108,7 @@ services:
       - ./certbot/www:/var/www/certbot/:ro
       - ./certbot/conf/:/etc/nginx/ssl/:ro
       - ./nginx/images/:/usr/share/nginx/images/:ro
+      - dist-volume:/usr/share/nginx/dist
 
   certbot:
     image: certbot/certbot:latest
@@ -119,3 +122,4 @@ volumes:
   postgres-permissions-data:
   blob:
     external: false
+  dist-volume:
