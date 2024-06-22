@@ -7,22 +7,32 @@ services:
       - "8080:8080"
 
   api_operations:
-    container_name: "snippet_operations"
+    container_name: "snippet-operations"
     image: ghcr.io/ingsis-group-12/snippet-operations:main
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_OPERATIONS_HOST}
+      BUCKET_URL: ${BUCKET_URL}
+      POSTGRES_OPERATIONS_PORT: ${POSTGRES_OPERATIONS_PORT}
+      PERMISSIONS_URL: ${PERMISSIONS_URL}
     restart: always
     ports:
       - "8081:8081"
     depends_on:
       - api_asset
+      - postgres_operations
 
   api_asset:
     container_name: "asset_service"
     image: ghcr.io/austral-ingsis/snippet-asset-service:latest
     restart: always
     ports:
-      - "8082:8082"
+      - "8082:8080"
     environment:
       AZURE_HOST: "http://azurite"
+      NEW_RELIC_AGENT_ENABLED: false
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
@@ -37,15 +47,22 @@ services:
       - blob:/workspace
 
   api_permissions:
-    container_name: "snippet_permissions"
+    container_name: "snippet-permissions"
     image: ghcr.io/ingsis-group-12/snippet-permissions:main
     restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PERMISSIONS_HOST: ${POSTGRES_PERMISSIONS_HOST}
+      POSTGRES_PERMISSIONS_PORT: ${POSTGRES_PERMISSIONS_PORT}
     ports:
       - "8083:8083"
     depends_on:
-      - postgres
+      - postgres_permissions
 
-  postgres:
+  postgres_operations:
+    container_name: "operations-db"
     image: postgres:latest
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -54,9 +71,20 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    env_file:
-      - .env
+      - postgres-operations-data:/var/lib/postgresql/data
+    restart: always
+
+  postgres_permissions:
+    container_name: "permissions-db"
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-permissions-data:/var/lib/postgresql/data
     restart: always
 
   printscript-ui:
@@ -87,6 +115,7 @@ services:
     restart: always
 
 volumes:
-  postgres-data:
+  postgres-operations-data:
+  postgres-permissions-data:
   blob:
     external: false
