@@ -26,8 +26,8 @@ server {
     }
 
     location /lucho {
-        root /usr/share/nginx/images;
-        index lucho.jpeg;
+        alias /usr/share/nginx/images/lucho.jpeg;
+        add_header Content-Type image/jpeg;
     }
 
     location /api-operations {
