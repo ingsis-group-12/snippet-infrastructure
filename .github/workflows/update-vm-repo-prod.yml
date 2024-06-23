@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  update-repo-prod:
+  update-repo-and-deploy-prod:
     name: update repo and pull updated images [ prod VM ]
     runs-on: ubuntu-latest
     steps:
