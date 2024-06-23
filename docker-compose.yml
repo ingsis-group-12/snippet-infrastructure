@@ -14,7 +14,6 @@ services:
       - "8081:8081"
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_OPERATIONS_HOST: ${POSTGRES_OPERATIONS_HOST}
       POSTGRES_OPERATIONS_PORT: ${POSTGRES_OPERATIONS_PORT}
@@ -34,7 +33,7 @@ services:
       - "8082:8080"
     environment:
       AZURE_HOST: "http://azurite"
-      NEW_RELIC_AGENT_ENABLED: ${NEW_RELIC_AGENT_ENABLED}
+      NEW_RELIC_AGENT_ENABLED: false
 
   azurite:
     container_name: "azurite"
@@ -56,10 +55,10 @@ services:
       - "8083:8083"
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_PERMISSIONS_HOST: ${POSTGRES_PERMISSIONS_HOST}
       POSTGRES_PERMISSIONS_PORT: ${POSTGRES_PERMISSIONS_PORT}
+      NEW_RELIC_AGENT_ENABLED: ${NEW_RELIC_AGENT_ENABLED}
     depends_on:
       - postgres-permissions
 
