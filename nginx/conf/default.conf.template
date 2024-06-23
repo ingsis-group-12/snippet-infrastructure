@@ -30,7 +30,7 @@ server {
         add_header Content-Type image/jpeg;
     }
 
-    location /api-operations/ {
+    location /api/operations/ {
          proxy_pass http://snippet-operations:8081/;
          proxy_set_header   Host $host;
          proxy_set_header   X-Real-IP $remote_addr;

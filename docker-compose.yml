@@ -1,14 +1,17 @@
 services:
-  api_runner:
-    container_name: "snippet_searcher_runner"
+  snippet-runner:
+    container_name: "snippet-runner"
     image: ghcr.io/ingsis-group-12/snippet-searcher-runner:main
     restart: always
     ports:
       - "8080:8080"
 
-  api_operations:
+  snippet-operations:
     container_name: "snippet-operations"
     image: ghcr.io/ingsis-group-12/snippet-operations:main
+    restart: always
+    ports:
+      - "8081:8081"
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -17,15 +20,12 @@ services:
       BUCKET_URL: ${BUCKET_URL}
       POSTGRES_OPERATIONS_PORT: ${POSTGRES_OPERATIONS_PORT}
       PERMISSIONS_URL: ${PERMISSIONS_URL}
-    restart: always
-    ports:
-      - "8081:8081"
     depends_on:
-      - api_asset
-      - postgres_operations
+      - asset-service
+      - postgres-operations
 
-  api_asset:
-    container_name: "asset_service"
+  asset-service:
+    container_name: "asset-service"
     image: ghcr.io/austral-ingsis/snippet-asset-service:latest
     restart: always
     ports:
@@ -35,8 +35,8 @@ services:
       NEW_RELIC_AGENT_ENABLED: false
 
   azurite:
-    image: mcr.microsoft.com/azure-storage/azurite
     container_name: "azurite"
+    image: mcr.microsoft.com/azure-storage/azurite
     hostname: azurite
     restart: always
     ports:
@@ -46,46 +46,46 @@ services:
     volumes:
       - blob:/workspace
 
-  api_permissions:
+  snippet-permissions:
     container_name: "snippet-permissions"
     image: ghcr.io/ingsis-group-12/snippet-permissions:main
     restart: always
+    ports:
+      - "8083:8083"
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_PERMISSIONS_HOST: ${POSTGRES_PERMISSIONS_HOST}
       POSTGRES_PERMISSIONS_PORT: ${POSTGRES_PERMISSIONS_PORT}
-    ports:
-      - "8083:8083"
     depends_on:
-      - postgres_permissions
+      - postgres-permissions
 
-  postgres_operations:
-    container_name: "operations-db"
+  postgres-operations:
+    container_name: "postgres-operations"
     image: postgres:latest
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: always
     ports:
       - "5432:5432"
     volumes:
       - postgres-operations-data:/var/lib/postgresql/data
-    restart: always
-
-  postgres_permissions:
-    container_name: "permissions-db"
-    image: postgres:latest
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  postgres-permissions:
+    container_name: "postgres-permissions"
+    image: postgres:latest
+    restart: always
     ports:
       - "5433:5432"
     volumes:
       - postgres-permissions-data:/var/lib/postgresql/data
-    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   printscript-ui:
     container_name: "printscript-ui"
@@ -100,8 +100,6 @@ services:
     container_name: "reverse-proxy"
     image: nginx:latest
     restart: always
-    environment:
-      DOMAIN_NAME: ${DOMAIN_NAME}
     ports:
       - "80:80"
       - "443:443"
@@ -111,6 +109,8 @@ services:
       - ./certbot/conf/:/etc/nginx/ssl/:ro
       - ./nginx/images/:/usr/share/nginx/images/:ro
       - dist-volume:/usr/share/nginx/dist
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
     command: /bin/bash -c "envsubst '$${DOMAIN_NAME}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
 
   certbot:
