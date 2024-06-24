@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  update-repo-and-deploy-prod:
+  update-repo-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
