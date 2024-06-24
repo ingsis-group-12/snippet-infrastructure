@@ -5,8 +5,7 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  update-repo-and-deploy-dev:
-    name: pull updated images and deploy
+  update-repo-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password

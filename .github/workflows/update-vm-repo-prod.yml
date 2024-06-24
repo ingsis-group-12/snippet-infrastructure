@@ -6,7 +6,6 @@ on:
 
 jobs:
   update-repo-and-deploy-prod:
-    name: pull updated images and deploy
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
