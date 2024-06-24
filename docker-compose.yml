@@ -72,9 +72,6 @@ services:
       - dist-volume:/usr/share/nginx/dist
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
-      NEW_RELIC_AGENT_ENABLED: ${NEW_RELIC_AGENT_ENABLED}
-      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
-      NEW_RELIC_APP_NAME: snippet-reverse-proxy
     command: /bin/bash -c "envsubst '$${DOMAIN_NAME}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
 
   certbot:
