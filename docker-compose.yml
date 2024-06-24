@@ -82,7 +82,8 @@ services:
       - "8082:8080"
     environment:
       AZURE_HOST: "http://azurite"
-      NEW_RELIC_AGENT_ENABLED: false
+      NEW_RELIC_AGENT_ENABLED: ${NEW_RELIC_AGENT_ENABLED}
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
 
   azurite:
     container_name: "azurite"
