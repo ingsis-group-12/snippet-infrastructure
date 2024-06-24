@@ -1,4 +1,4 @@
-name: remote ssh command
+name: Update repo and deploy [ dev VM ]
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   update-repo-and-deploy-dev:
-    name: update repo and pull updated images [ dev VM ]
+    name: pull updated images and deploy
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
