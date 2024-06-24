@@ -1,7 +1,7 @@
 services:
   snippet-runner:
     container_name: "snippet-runner"
-    image: ghcr.io/ingsis-group-12/snippet-searcher-runner:main
+    image: ghcr.io/ingsis-group-12/snippet-searcher-runner:${IMAGE_TAG}
     restart: always
     ports:
       - "8080:8080"
@@ -10,7 +10,7 @@ services:
 
   snippet-operations:
     container_name: "snippet-operations"
-    image: ghcr.io/ingsis-group-12/snippet-operations:main
+    image: ghcr.io/ingsis-group-12/snippet-operations:${IMAGE_TAG}
     restart: always
     ports:
       - "8081:8081"
@@ -27,31 +27,9 @@ services:
       - asset-service
       - postgres-operations
 
-  asset-service:
-    container_name: "asset-service"
-    image: ghcr.io/austral-ingsis/snippet-asset-service:latest
-    restart: always
-    ports:
-      - "8082:8080"
-    environment:
-      AZURE_HOST: "http://azurite"
-      NEW_RELIC_AGENT_ENABLED: false
-
-  azurite:
-    container_name: "azurite"
-    image: mcr.microsoft.com/azure-storage/azurite
-    hostname: azurite
-    restart: always
-    ports:
-      - "10000:10000"
-      - "10001:10001"
-      - "10002:10002"
-    volumes:
-      - blob:/workspace
-
   snippet-permissions:
     container_name: "snippet-permissions"
-    image: ghcr.io/ingsis-group-12/snippet-permissions:main
+    image: ghcr.io/ingsis-group-12/snippet-permissions:${IMAGE_TAG}
     restart: always
     ports:
       - "8083:8083"
@@ -64,35 +42,9 @@ services:
     depends_on:
       - postgres-permissions
 
-  postgres-operations:
-    container_name: "postgres-operations"
-    image: postgres:alpine
-    restart: always
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres-operations-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-
-  postgres-permissions:
-    container_name: "postgres-permissions"
-    image: postgres:alpine
-    restart: always
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres-permissions-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-
   printscript-ui:
     container_name: "printscript-ui"
-    image: ghcr.io/ingsis-group-12/printscript-ui:master
+    image: ghcr.io/ingsis-group-12/printscript-ui:${IMAGE_TAG}
     restart: always
     ports:
       - "5173:5173"
@@ -121,6 +73,54 @@ services:
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
+
+  asset-service:
+    container_name: "asset-service"
+    image: ghcr.io/austral-ingsis/snippet-asset-service:latest
+    restart: always
+    ports:
+      - "8082:8080"
+    environment:
+      AZURE_HOST: "http://azurite"
+      NEW_RELIC_AGENT_ENABLED: false
+
+  azurite:
+    container_name: "azurite"
+    image: mcr.microsoft.com/azure-storage/azurite
+    hostname: azurite
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - blob:/workspace
+
+  postgres-operations:
+    container_name: "postgres-operations"
+    image: postgres:alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-operations-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  postgres-permissions:
+    container_name: "postgres-permissions"
+    image: postgres:alpine
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-permissions-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 volumes:
   postgres-operations-data:
