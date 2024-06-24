@@ -53,7 +53,7 @@ services:
 
   reverse-proxy:
     container_name: "reverse-proxy"
-    image: nginx:stable-alpine
+    image: nginx:latest
     restart: always
     ports:
       - "80:80"
