@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.VM_DEV_SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/projects/snippet-infrastructure
+            cd /app/snippet-infrastructure
             sudo git checkout dev
             sudo git pull
             sudo docker compose pull
