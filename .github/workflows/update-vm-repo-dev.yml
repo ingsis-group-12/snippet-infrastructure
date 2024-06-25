@@ -19,5 +19,5 @@ jobs:
             cd /app/snippet-infrastructure
             sudo git checkout dev
             sudo git pull
-            sudo docker compose pull
-            sudo docker compose up -d
+            sudo docker compose --profile full-setup pull
+            sudo docker compose --profile full-setup up -d

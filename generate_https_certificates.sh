@@ -15,4 +15,4 @@ if [ -z "$DOMAIN_NAME" ]; then
   exit 1
 fi
 
-docker compose certbot run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d $DOMAIN_NAME
+docker compose --profile certbot run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d $DOMAIN_NAME

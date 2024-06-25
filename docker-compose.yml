@@ -9,6 +9,7 @@ services:
       NEW_RELIC_AGENT_ENABLED: ${NEW_RELIC_AGENT_ENABLED}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: snippet-runner
+    profiles: ["full-setup", "frontend-development"]
 
   snippet-operations:
     container_name: "snippet-operations"
@@ -30,6 +31,7 @@ services:
     depends_on:
       - asset-service
       - postgres-operations
+    profiles: ["full-setup", "frontend-development"]
 
   snippet-permissions:
     container_name: "snippet-permissions"
@@ -47,6 +49,7 @@ services:
       NEW_RELIC_APP_NAME: snippet-permissions
     depends_on:
       - postgres-permissions
+    profiles: ["full-setup", "frontend-development"]
 
   printscript-ui:
     container_name: "printscript-ui"
@@ -56,6 +59,7 @@ services:
       - "5173:5173"
     volumes:
       - dist-volume:/app/dist
+    profiles: ["full-setup"]
 
   reverse-proxy:
     container_name: "reverse-proxy"
@@ -74,13 +78,14 @@ services:
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
     entrypoint: ["/bin/bash", "/init_nginx.sh"]
+    profiles: ["full-setup", "nginx"]
 
   certbot:
     image: certbot/certbot:latest
-    profiles: ["certbot"]
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
+    profiles: ["certbot"]
 
   asset-service:
     container_name: "asset-service"
@@ -93,6 +98,7 @@ services:
       NEW_RELIC_AGENT_ENABLED: ${NEW_RELIC_AGENT_ENABLED}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: snippet-asset-service
+    profiles: ["full-setup", "frontend-development"]
 
   azurite:
     container_name: "azurite"
@@ -105,6 +111,7 @@ services:
       - "10002:10002"
     volumes:
       - blob:/workspace
+    profiles: ["full-setup", "frontend-development"]
 
   postgres-operations:
     container_name: "postgres-operations"
@@ -118,6 +125,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    profiles: ["full-setup", "frontend-development"]
 
   postgres-permissions:
     container_name: "postgres-permissions"
@@ -131,6 +139,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    profiles: ["full-setup", "frontend-development"]
 
 volumes:
   postgres-operations-data:
