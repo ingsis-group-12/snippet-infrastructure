@@ -28,6 +28,7 @@ services:
       NEW_RELIC_AGENT_ENABLED: ${NEW_RELIC_AGENT_ENABLED}
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_APP_NAME: snippet-operations
+      REDIS_HOST: ${REDIS_HOST}
     depends_on:
       - asset-service
       - postgres-operations
@@ -140,6 +141,12 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     profiles: ["full-setup", "frontend-development"]
+
+  redis:
+      container_name: "redis"
+      image: redis:6-alpine
+      ports:
+        - "6379:6379"
 
 volumes:
   postgres-operations-data:
